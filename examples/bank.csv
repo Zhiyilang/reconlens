@@ -1,0 +1,9 @@
+id,ref,date,amount,currency,description
+b01,INV-1001,2026-09-01,1250.00,CNY,INV-1001 payment
+b02,INV-1002,2026-09-03,475.00,CNY,INV-1002 payment
+b03,,2026-09-05,990.00,CNY,wire from ACME
+b04,,2026-09-08,500.00,CNY,transfer
+b05,,2026-09-10,2000.00,CNY,settlement
+b06,,2026-09-12,1200.00,CNY,card settlement
+b07,,2026-09-15,750.00,CNY,payout
+b08,,2026-09-18,330.00,CNY,refund

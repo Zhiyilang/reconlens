@@ -1,0 +1,10 @@
+id,ref,date,amount,currency,description
+l01,INV-1001,2026-09-01,1250.00,CNY,INV-1001 payment
+l02,INV-1002,2026-09-03,480.00,CNY,INV-1002 payment
+l03,,2026-09-05,990.00,CNY,wire from ACME
+l04,,2026-09-09,500.00,CNY,transfer
+l05,,2026-09-10,1200.00,CNY,settlement split A
+l06,,2026-09-10,800.00,CNY,settlement split B
+l07,,2026-09-12,1200.00,CNY,card settlement
+l08,,2026-09-30,750.00,CNY,payout
+l09,,2026-09-28,666.66,CNY,mystery item

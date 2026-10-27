@@ -1,0 +1,23 @@
+# ReconLens submission manifest
+sha256-at-build: see below
+INCLUDE README.md
+INCLUDE README.zh.md
+INCLUDE AI_CODING_JOURNEY.md
+INCLUDE SUBMISSION_EMAIL.md
+INCLUDE LICENSE
+INCLUDE eval.py
+INCLUDE build_submission.py
+INCLUDE .gitignore
+INCLUDE .github/workflows/ci.yml
+INCLUDE reconlens/__init__.py
+INCLUDE reconlens/model.py
+INCLUDE reconlens/loader.py
+INCLUDE reconlens/matcher.py
+INCLUDE reconlens/explain.py
+INCLUDE reconlens/report.py
+INCLUDE reconlens/samples.py
+INCLUDE reconlens/__main__.py
+INCLUDE examples/bank.csv
+INCLUDE examples/ledger.csv
+GENERATED report.md
+GENERATED report.txt

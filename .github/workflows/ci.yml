@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  test:
+    name: assertions (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run offline assertion suite
+        run: python eval.py
+      - name: Demo must reproduce without error
+        run: python -m reconlens --demo | head -20
+      - name: CSV path must match the in-memory demo
+        run: |
+          python - <<'PY'
+          import sys
+          sys.path.insert(0, ".")
+          from reconlens import load_any, run
+          from reconlens.samples import demo_bank, demo_ledger
+          a = run(demo_bank(), demo_ledger(), date_window=3)["summary"]
+          fb, pb = load_any("examples/bank.csv", "bank")
+          fl, pl = load_any("examples/ledger.csv", "ledger")
+          assert not (pb + pl), pb + pl
+          b = run(fb, fl, date_window=3)["summary"]
+          assert a == b, (a, b)
+          print("csv path matches demo:", b)
+          PY
+
+  hostile-locale:
+    name: hostile locale (LC_ALL=C, no PYTHONUTF8)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Assertion suite under LC_ALL=C
+        env:
+          LC_ALL: C
+          LANG: C
+          PYTHONUTF8: ""
+        run: python eval.py
+      - name: CLI under ascii stdout
+        env:
+          LC_ALL: C
+          LANG: C
+          PYTHONUTF8: ""
+          PYTHONIOENCODING: ascii
+        run: python -m reconlens --demo > /dev/null
+
+  markdown-report:
+    name: markdown report renders
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Render every format
+        run: |
+          python -m reconlens --demo --format markdown --out report.md
+          python -m reconlens --demo --format json --out report.json
+          test -s report.md
+          test -s report.json
+      - name: Report is byte-stable
+        run: |
+          python -m reconlens --demo --format markdown --out report2.md
+          diff -q report.md report2.md
